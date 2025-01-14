@@ -1,38 +1,26 @@
 import Grid from '@mui/material/Grid2';
-import { Button, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, Card, TextField, Tooltip, Typography, Divider } from '@mui/material';
 
 function CalculatorForm() {
   return (
     <Grid container justifyContent="center" spacing={1}>
+    <Card variant="outlined" sx={{ minWidth: 300, maxWidth: 600, width: "50%", }}>
       <form
-        style={{minWidth: 300, maxWidth: 600, width: "50%", display: "flex", flexDirection: "column", padding: 20}}
-        role="form"
+        style={{display: "flex", flexDirection: "column", padding: 20}}
+        className="app_form"
       >
         {/* H1 Title */}
         <Typography
           variant="h1"
           gutterBottom
-          sx={{
-            '-webkit-font-smoothing': 'antialiased',
-            'text-rendering': 'optimizeLegibility',
-            'font-variant-ligatures': 'common-ligatures',
-            'font-family': '"WoltHeading-Omnes", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Arimo", "Open Sans", sans-serif',
-            'font-feature-settings': '"kern", "ss01", "ss05", "ss07"',
-            'text-transform': 'none',
-            margin: 0,
-            padding: '0 1rem',
-            'font-size': '2rem',
-            'font-style': 'normal',
-            'font-weight': 700,
-            'font-stretch': '100%',
-            'line-height': '2.5rem',
-          }}
         >
           Delivery Order Price Calculator
         </Typography>
 
+        <Divider style={{marginBottom: '1em'}}/>
+
         {/* H2 Title */}
-        <Typography variant="h2" gutterBottom style={{fontSize: "1.1em", fontWeight: 400, textAlign: "left", marginBottom: "1em"}}>
+        <Typography variant="h2" gutterBottom>
           Details
         </Typography>
 
@@ -92,16 +80,19 @@ function CalculatorForm() {
           />
         </Tooltip>
 
+        <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
         {/* Get location Button */}
-        <Button data-test-id="getLocation" tabIndex={0}>
+        <Button data-test-id="getLocation" tabIndex={0} style={{paddingLeft: '1.5em', paddingRight: '1.5em'}}>
           Get location
         </Button>
 
         {/* Submit Button */}
-        <Button type="submit" tabIndex={0}>
+        <Button type="submit" tabIndex={0} variant="contained" style={{paddingLeft: '1.5em', paddingRight: '1.5em'}}>
           Calculate delivery price
         </Button>
+        </div>
       </form>
+    </Card>
     </Grid>
   )
 }

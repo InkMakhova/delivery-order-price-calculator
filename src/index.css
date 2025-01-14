@@ -1,13 +1,36 @@
+@font-face {
+  font-family: 'WoltHeading-Omnes';
+  font-weight: 500;
+  font-style: normal;
+  src: url('./assets/fonts/OmnesLatin-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'WoltHeading-Omnes';
+  font-weight: 400;
+  font-style: normal;
+  src: url('./assets/fonts/OmnesLatin-SemiBold.woff2') format('woff2');
+}
+
+/*:root {*/
+/*  --wolt-heading-font-family: "WoltHeading-Omnes", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Arimo", "Open Sans", sans-serif;*/
+/*  --wolt-heading-font-feature-settings: "kern", "ss01", "ss05", "ss07"*/
+/*}*/
+
 body {
   margin: 0;
   padding-top: 30px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /*background-color: #0078d4;*/
+  /*background: linear-gradient(240deg, rgba(255,255,255,1) 0%, rgba(0,212,255,1) 100%);*/
+}
+
+form {
+  background-color: #ffffff;
+          /*#ebf5fc;*/
 }
 
 code {

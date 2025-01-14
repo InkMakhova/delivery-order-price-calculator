@@ -17,45 +17,29 @@ const theme = createTheme({
     fontFamily: 'Roboto, Arial, sans-serif',
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '8px',
-          textTransform: 'none',
-          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
-        },
-      },
-    },
     MuiTextField: {
       styleOverrides: {
         root: {
+          fontFamily: "kern, ss01, ss05, ss07",
           marginBottom: '1em',
-          borderRadius: '8px',
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: '#1976d2',
-            },
-            '&:hover fieldset': {
-              borderColor: '#115293',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#0d47a1',
-            },
-          },
         },
       },
     },
     MuiTypography: {
       styleOverrides: {
         h1: {
-          fontSize: '2em',
-          fontWeight: 500,
-          marginBottom: '1em',
-        },
-        h2: {
+          fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
           fontSize: '1.5em',
           fontWeight: 400,
-          marginBottom: '1em',
+          marginBottom: '0.7em',
+        },
+        h2: {
+          fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
+          fontSize: '1.5em',
+          fontWeight: 300,
+          color: '#0078d4',
+          textAlign: 'left',
+          marginBottom: '0.5em',
         },
       },
     },
