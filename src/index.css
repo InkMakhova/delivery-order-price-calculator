@@ -24,7 +24,10 @@ body {
   padding-right: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*background-color: #0078d4;*/
+  /*background-image: url('./assets/images/bg-illustration.png');*/
+  /*background-size: cover;*/
+  /*background-position: center;*/
+  /*background-color: #e5f2f1;*/
   /*background: linear-gradient(240deg, rgba(255,255,255,1) 0%, rgba(0,212,255,1) 100%);*/
 }
 

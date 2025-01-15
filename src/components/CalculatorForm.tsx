@@ -82,12 +82,12 @@ function CalculatorForm() {
 
         <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
         {/* Get location Button */}
-        <Button data-test-id="getLocation" tabIndex={0} style={{paddingLeft: '1.5em', paddingRight: '1.5em'}}>
+        <Button data-test-id="getLocation" tabIndex={0} size="large" style={{paddingLeft: '1.5em', paddingRight: '1.5em', borderRadius: '5rem', textTransform: 'none', fontWeight: 600, color: "#009deO"}}>
           Get location
         </Button>
 
         {/* Submit Button */}
-        <Button type="submit" tabIndex={0} variant="contained" style={{paddingLeft: '1.5em', paddingRight: '1.5em'}}>
+        <Button type="submit" size="large" tabIndex={0} variant="contained" style={{paddingLeft: '1.5em', paddingRight: '1.5em', borderRadius: '5rem', textTransform: 'none', fontWeight: 600, boxShadow: "none"}}>
           Calculate delivery price
         </Button>
         </div>

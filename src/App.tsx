@@ -7,7 +7,7 @@ import CalculatorForm from "./components/CalculatorForm";
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#008dca',
     },
     secondary: {
       main: '#dc004e',
@@ -37,7 +37,7 @@ const theme = createTheme({
           fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
           fontSize: '1.5em',
           fontWeight: 300,
-          color: '#0078d4',
+          color: '#009de0',
           textAlign: 'left',
           marginBottom: '0.5em',
         },
