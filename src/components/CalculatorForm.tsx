@@ -74,7 +74,7 @@ function CalculatorForm() {
             label="User longitude"
             variant="outlined"
             placeholder="Input user longitude"
-            style={{marginBottom: "1em"}}
+            style={{marginBottom: "1.5em"}}
             aria-label="User longitude"
             aria-required="true"
           />
