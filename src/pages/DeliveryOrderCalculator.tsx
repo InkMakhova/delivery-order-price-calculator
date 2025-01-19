@@ -85,24 +85,36 @@ function DeliveryOrderCalculator():JSX.Element {
   }
 
   const submitForm = (): void => {
-    // Validate form
+    // try {
+    //   // Validate form data
+    //  validationSchema.validate(orderDetails.data, { abortEarly: false });
 
-    // Calculate order
-    const transformedOrderDetails: OrderDetails = {
-      cartValue: Number(orderDetails.data.cartValue) * 100,
-      userLocation: {
-        latitude: Number(orderDetails.data.userLatitude),
-        longitude: Number(orderDetails.data.userLongitude)
-      }
-    }
-    const priceDetails: PriceDetails | null = calculateOrder(transformedOrderDetails, deliveryPriceParameters)
+      // Calculate order
+      const transformedOrderDetails: OrderDetails = {
+        cartValue: Number(orderDetails.data.cartValue) * 100,
+        userLocation: {
+          latitude: Number(orderDetails.data.userLatitude),
+          longitude: Number(orderDetails.data.userLongitude)
+        }
+      };
+      const priceDetails: PriceDetails | null = calculateOrder(transformedOrderDetails, deliveryPriceParameters);
 
-    setDeliveryPriceDetails(() => {
-      return {
-        data: priceDetails ? priceDetails : null,
-        error: priceDetails ? null : "Sorry! Delivery is not possible for this location. The distance is too long."
-      }
-    })
+      setDeliveryPriceDetails(() => {
+        return {
+          data: priceDetails ? priceDetails : null,
+          error: priceDetails ? null : "Sorry! Delivery is not possible for this location. The distance is too long."
+        };
+      });
+    // } catch (err) {
+    //   if (err instanceof Yup.ValidationError) {
+    //     // Handle validation errors
+    //     const errorMessages = err.inner.map(error => error.message).join(', ');
+    //     setOrderDetails(prevState => ({
+    //       ...prevState,
+    //       error: errorMessages
+    //     }));
+    //   }
+    // }
   }
 
   useEffect(() => {
