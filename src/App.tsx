@@ -1,8 +1,7 @@
-// @ts-ignore
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './App.css';
-import CalculatorForm from "./components/CalculatorForm";
+import DeliveryOrderCalculator from "./pages/DeliveryOrderCalculator";
 
 const theme = createTheme({
   palette: {
@@ -17,11 +16,26 @@ const theme = createTheme({
     fontFamily: 'Roboto, Arial, sans-serif',
   },
   components: {
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          marginBottom: '1em'
+        }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          width: '100%',
+          textAlign: 'left',
+          marginBottom: '1em',
+        }
+      }
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
           fontFamily: "kern, ss01, ss05, ss07",
-          marginBottom: '1em',
         },
       },
     },
@@ -32,6 +46,7 @@ const theme = createTheme({
           fontSize: '1.5em',
           fontWeight: 400,
           marginBottom: '0.7em',
+          textAlign: 'center'
         },
         h2: {
           fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
@@ -43,6 +58,21 @@ const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          paddingLeft: '1.5em',
+          paddingRight: '1.5em',
+          borderRadius: '5rem',
+          textTransform: 'none',
+          fontWeight: 600,
+          boxShadow: "none",
+          '&:hover': {
+            boxShadow: "none"
+          }
+        },
+      }
+    }
   },
 });
 
@@ -51,7 +81,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <CalculatorForm />
+        <DeliveryOrderCalculator />
       </div>
     </ThemeProvider>
   );

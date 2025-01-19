@@ -12,11 +12,6 @@
   src: url('./assets/fonts/OmnesLatin-SemiBold.woff2') format('woff2');
 }
 
-/*:root {*/
-/*  --wolt-heading-font-family: "WoltHeading-Omnes", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Arimo", "Open Sans", sans-serif;*/
-/*  --wolt-heading-font-feature-settings: "kern", "ss01", "ss05", "ss07"*/
-/*}*/
-
 body {
   margin: 0;
   padding-top: 30px;
@@ -24,16 +19,13 @@ body {
   padding-right: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*background-image: url('./assets/images/bg-illustration.png');*/
-  /*background-size: cover;*/
-  /*background-position: center;*/
-  /*background-color: #e5f2f1;*/
-  /*background: linear-gradient(240deg, rgba(255,255,255,1) 0%, rgba(0,212,255,1) 100%);*/
 }
 
 form {
   background-color: #ffffff;
-          /*#ebf5fc;*/
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 
 code {
