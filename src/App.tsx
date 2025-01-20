@@ -26,9 +26,8 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          width: '100%',
+          minWidth: 200,
           textAlign: 'left',
-          marginBottom: '1em',
         }
       }
     },

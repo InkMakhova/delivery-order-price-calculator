@@ -18,14 +18,22 @@ import { venueSlugs } from '../types/venue-slugs'
 const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, onSubmit: any, pending: boolean}) => {
   const { orderDetails, dispatch, onSubmit, pending } = props
 
-  const initialValidation = {
-    cartValue: false,
-    userLatitude: false,
-    userLongitude: false
+  const fieldHandler = {
+    cartValue: (value: string) => /^[0-9]+([.,][0-9]+)?$/.test(value) ? null : "Please enter cart value (positive number only)",
+    userLatitude: (value: string) => /^-?([1-8]?[0-9](\.\d+)?|90(\.0+)?)$/.test(value) ? null : "Please enter latitude (must be between -90 and 90)",
+    userLongitude: (value: string) => /^-?([1-9]?[0-9](\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.0+)?)$/.test(value) ? null : "Please enter longitude (must be between -180 and 180)"
   }
 
-  const [validation, setValidation] =
-    useState<{cartValue: boolean, userLatitude: boolean, userLongitude: boolean}>(initialValidation)
+  // Initial state
+  const initialValidationErrors = {
+    cartValue: null,
+    userLatitude: null,
+    userLongitude: null
+  }
+
+  // State
+  const [validationErrors, setValidationErrors] =
+    useState<{cartValue: string | null, userLatitude: string | null, userLongitude: string | null}>(initialValidationErrors)
 
   // Handlers
   const getLocation = () => {
@@ -49,15 +57,45 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
     }
   }
 
-  const validateInput = (entries: { [key: string]: boolean }) => {
-    setValidation(prevState => {
-      return {...prevState, ...entries}
+  const validate = (name: keyof typeof fieldHandler, value: string ): void => {
+    setValidationErrors(prevState => ({
+      ...prevState,
+      [name]: validateField(name,value)
+    }));
+  }
+
+  const validateField = (name: keyof typeof fieldHandler, value: string): string | null => {
+    if (fieldHandler[name]) {
+      return fieldHandler[name](value)
+    }
+    return null;
+  }
+
+  const valid = () => {
+    const cartValueValid = /^[0-9]+([.,][0-9]+)?$/.test(orderDetails.data.cartValue);
+    const latitudeValid = /^-?([1-8]?[0-9](\.\d+)?|90(\.0+)?)$/.test(orderDetails.data.userLatitude);
+    const longitudeValid = /^-?([1-9]?[0-9](\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.0+)?)$/.test(orderDetails.data.userLongitude);
+
+    setValidationErrors(prevState => {
+      return {
+        ...prevState,
+        cartValue: !cartValueValid ? "Please enter cart value (positive number only)" : null,
+        userLatitude: !latitudeValid ? "Please enter latitude (must be between -90 and 90)" : null,
+        userLongitude: !longitudeValid ? "Please enter longitude (must be between -180 and 180)" : null
+      }
     })
+
+    if (!cartValueValid || !latitudeValid || !longitudeValid) {
+      return false;
+    }
+
+    return true;
   }
 
   const submit = (evt: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }): void => {
     evt.preventDefault()
-    onSubmit()
+    const isValid = valid()
+    if (isValid) onSubmit()
   }
 
   // Render
@@ -76,29 +114,31 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
       </Typography>
 
       {/* Venue slag Input*/}
-      <Tooltip title="Select venue slug" placement="top" arrow>
-        <FormControl>
-          <InputLabel id="venueSlug">Venue slug</InputLabel>
-          <Select
-            id="venueSlug"
-            name="venueSlug"
-            labelId="venueSlug"
-            label="Venue slug"
-            input={<OutlinedInput id="venueSlug" label="Venue slug"/>}
-            inputProps={{"data-test-id": "venueSlug"}}
-            value={orderDetails.data.venueSlug}
-            onChange={(evt: SelectChangeEvent): void => {
-              dispatch("data", {
-                "venueSlug": evt.target.value,
-                "userLatitude": "",
-                "userLongitude": ""
-              })
-            }}
-          >
-            {venueSlugs.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
-          </Select>
-        </FormControl>
-      </Tooltip>
+      <Box className="inputContainer">
+        <Tooltip title="Select venue slug" placement="top" arrow>
+          <FormControl fullWidth>
+            <InputLabel id="venueSlug">Venue slug</InputLabel>
+            <Select
+              id="venueSlug"
+              name="venueSlug"
+              labelId="venueSlug"
+              label="Venue slug"
+              input={<OutlinedInput id="venueSlug" label="Venue slug"/>}
+              inputProps={{"data-test-id": "venueSlug"}}
+              value={orderDetails.data.venueSlug}
+              onChange={(evt: SelectChangeEvent): void => {
+                dispatch("data", {
+                  "venueSlug": evt.target.value,
+                  "userLatitude": "",
+                  "userLongitude": ""
+                })
+              }}
+            >
+              {venueSlugs.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+            </Select>
+          </FormControl>
+        </Tooltip>
+      </Box>
 
       {/* Cart value Input */}
       <Box className="inputContainer">
@@ -106,23 +146,28 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
           <TextField
             id="cartValue"
             name="cartValue"
+            type="number"
             label="Cart value (EUR)"
             variant="outlined"
             placeholder="Input cart value"
             aria-label="Cart value in euro"
             aria-required="true"
-            inputProps={{
-              "data-test-id": "cartValue",
-              pattern: "^[0-9]+([.,][0-9]+)?$"
-            }}
+            inputProps={{"data-test-id": "cartValue"}}
             value={orderDetails.data.cartValue}
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-              dispatch("data", {"cartValue": evt.target.value})
-              validateInput({"cartValue": evt.target.validity.valid})
+              let value = evt.target.value.replace(/[+eE]/g, "");
+              if (value.indexOf('-') > 0) {
+                value = value.replace(/-/g, "");
+              }
+              dispatch("data", { cartValue: value });
+            }}
+            onBlur={(evt) => {
+              validate("cartValue",evt.target.value)
             }}
             required
-            error={!validation.cartValue}
-            helperText={!validation.cartValue ? "Please enter cart value (positive number only)" : ""}
+            error={!!validationErrors.cartValue}
+            helperText={validationErrors.cartValue}
+            fullWidth
           />
         </Tooltip>
       </Box>
@@ -133,6 +178,7 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
           <TextField
             id="userLatitude"
             name="userLatitude"
+            type="number"
             label="User latitude"
             variant="outlined"
             placeholder="Input user latitude"
@@ -140,16 +186,19 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
             aria-required="true"
             inputProps={{
               "data-test-id": "userLatitude",
-              pattern: "^-?([1-8]?[0-9](\\.\\d+)?|90(\\.0+)?)$"
+              maxLength: 32
             }}
             value={orderDetails.data.userLatitude}
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
               dispatch("data", {"userLatitude": evt.target.value})
-              validateInput({"userLatitude": evt.target.validity.valid})
+            }}
+            onBlur={(evt) => {
+              validate("userLatitude",evt.target.value)
             }}
             required
-            error={!validation.userLatitude}
-            helperText={!validation.userLatitude ? "Please enter latitude (must be between -90 and 90)" : ""}
+            error={!!validationErrors.userLatitude}
+            helperText={validationErrors.userLatitude}
+            fullWidth
           />
         </Tooltip>
       </Box>
@@ -160,6 +209,7 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
           <TextField
             id="userLongitude"
             name="userLongitude"
+            type="number"
             label="User longitude"
             variant="outlined"
             placeholder="Input user longitude"
@@ -167,16 +217,19 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, o
             aria-required="true"
             inputProps={{
               "data-test-id": "userLongitude",
-              pattern: "^-?([1-9]?[0-9](\\.\\d+)?|1[0-7][0-9](\\.\\d+)?|180(\\.0+)?)$"
+              maxLength: 32
             }}
             value={orderDetails.data.userLongitude}
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
               dispatch("data",{"userLongitude": evt.target.value})
-              validateInput({"userLongitude": evt.target.validity.valid})
+            }}
+            onBlur={(evt) => {
+              validate("userLongitude",evt.target.value)
             }}
             required
-            error={!validation.userLongitude}
-            helperText={!validation.userLongitude ? "Please enter longitude (must be between -180 and 180)" : ""}
+            error={!!validationErrors.userLongitude}
+            helperText={validationErrors.userLongitude}
+            fullWidth
           />
         </Tooltip>
       </Box>
