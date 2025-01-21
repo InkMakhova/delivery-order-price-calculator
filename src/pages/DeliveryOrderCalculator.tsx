@@ -1,5 +1,5 @@
 // Package imports
-import React, { JSX, useEffect, useState } from 'react'
+import React, { JSX, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid2'
 import Card from '@mui/material/Card'
@@ -53,6 +53,9 @@ function DeliveryOrderCalculator():JSX.Element {
     error: null
   }
 
+  // Ref to track the current venue slug to fetch data only when it changes
+  const venueSlugRef = useRef<typeof venueSlugs[number] | null>(null)
+
   // States
   const [deliveryPriceParameters, setDeliveryPriceParameters] =
     useState<DeliveryPriceParameters>(initialDeliveryParameters)
@@ -89,10 +92,13 @@ function DeliveryOrderCalculator():JSX.Element {
   }
 
   const submitForm = (): void => {
-    // Calculate order
+    // Format order detail for calculation
     const formattedOrderDetails: OrderDetail = formatOrderDetails(orderDetails.data)
+
+    // Calculate order
     const priceDetails: PriceDetail | null = calculateOrder(formattedOrderDetails, deliveryPriceParameters)
 
+    // Set delivery price result
     setDeliveryPriceDetails(() => {
       return {
         data: priceDetails ? priceDetails : null,
@@ -101,30 +107,37 @@ function DeliveryOrderCalculator():JSX.Element {
     });
   }
 
+
   useEffect(() => {
-    if (orderDetails.data.venueSlug) {
+    if (orderDetails.data.venueSlug && orderDetails.data.venueSlug !== venueSlugRef.current) {
+      // Update the current venue slug reference to the new venue slug
+      venueSlugRef.current = orderDetails.data.venueSlug;
+
+      // Set parameters to calculate delivery
       const successHandler = (data: any): void => {
         setDeliveryPriceParameters(data)
       }
 
+      // Set error status to show to the User
       const errorHandler = (status: string): void => {
-        setOrderDetails(prevState => {
+        setOrderDetails((prevState: {data: OrderFormData, error: string | null}) => {
           return { ...prevState, "error": status }
         })
       }
 
-      // Reset error before fetching new data
-      setOrderDetails(prevState => {
+      // Reset error status before fetching new data
+      setOrderDetails((prevState: {data: OrderFormData, error: string | null}) => {
         return { ...prevState, "error": null }
       })
 
+      // Fetch venue slug parameters for calculation
       fetchVenueSlugData(orderDetails.data.venueSlug, setPending, successHandler, errorHandler)
     }
   }, [orderDetails.data.venueSlug])
 
   return (
     <Grid container justifyContent="center" spacing={1}>
-      <Card variant="outlined" sx={{ minWidth: 300, maxWidth: 600, width: "50%", }}>
+      <Card variant="outlined">
         {/* Form */}
         <DeliveryOrderCalculatorForm
           orderDetails={orderDetails}

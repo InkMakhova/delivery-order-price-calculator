@@ -6,28 +6,37 @@ import DeliveryOrderCalculator from "./pages/DeliveryOrderCalculator";
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#008dca',
+      main: "#008dca",
     },
     secondary: {
-      main: '#dc004e',
+      main: "#dc004e",
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
+    fontFamily: "Roboto, Arial, sans-serif",
   },
   components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          minWidth: 300,
+          maxWidth: 600,
+          width: "50%"
+        }
+      }
+    },
     MuiDivider: {
       styleOverrides: {
         root: {
-          marginBottom: '1em'
+          marginBottom: "1em"
         }
       }
     },
     MuiInputBase: {
       styleOverrides: {
         root: {
-          minWidth: 200,
-          textAlign: 'left',
+          // minWidth: 200,
+          textAlign: "left",
         }
       }
     },
@@ -41,32 +50,32 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         h1: {
-          fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
-          fontSize: '1.5em',
+          fontFamily: "WoltHeading-Omnes, Roboto, Arial, sans-serif",
+          fontSize: "1.5em",
           fontWeight: 400,
-          marginBottom: '0.7em',
-          textAlign: 'center'
+          textAlign: "center",
+          margin: "0 auto"
         },
         h2: {
-          fontFamily: 'WoltHeading-Omnes, Roboto, Arial, sans-serif',
-          fontSize: '1.5em',
+          fontFamily: "WoltHeading-Omnes, Roboto, Arial, sans-serif",
+          fontSize: "1.5em",
           fontWeight: 300,
-          color: '#009de0',
-          textAlign: 'left',
-          marginBottom: '0.5em',
+          color: "#009de0",
+          textAlign: "left",
+          marginBottom: "0.5em",
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          paddingLeft: '1.5em',
-          paddingRight: '1.5em',
-          borderRadius: '5rem',
-          textTransform: 'none',
+          paddingLeft: "1.5em",
+          paddingRight: "1.5em",
+          borderRadius: "5rem",
+          textTransform: "none",
           fontWeight: 600,
           boxShadow: "none",
-          '&:hover': {
+          "&:hover": {
             boxShadow: "none"
           }
         },

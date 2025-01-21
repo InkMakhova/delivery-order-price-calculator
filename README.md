@@ -1,14 +1,69 @@
-# Getting Started with Create React App
+# Delivery Order Price Calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The **Delivery Order Price Calculator** is an application designed to calculate delivery fees based on various parameters, including the venue slug, cart value, base price, delivery distance, minimum order amount, and additional factors. The app dynamically fetches required data from an API and computes the total price for an order, including delivery fees and potential surcharges.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📋 Specification
+
+### Rules for Calculating the Delivery Fee
+
+1. **Distance-Based Calculation**
+
+   The delivery fee is determined by the distance (in meters) between:
+    - The venue location (coordinates provided via a static API URL).
+    - The user's location (retrieved using a "Get Location" button feature in the browser).
+
+2. **Dynamic Parameters**
+
+   Key parameters required for the calculation are fetched from an API URL, including:
+   - `base_price`: The base delivery fee.
+   - `order_minimum_no_surcharge`: The minimum cart value to avoid a surcharge.
+   - `distance_ranges`: Parameters (`a` and `b`) that adjust the fee based on the delivery distance.
+
+3. **Fee Formula**
+
+   The delivery fee is calculated as:
+   ```plaintext
+   base_price + a + (b * distance / 10)
+   ```
+   - `a` and `b` are values retrieved from the `distance_ranges`.  
+   - `distance` is the delivery distance (in meters).
+   - if the distance exceeds the maximum allowable range, delivery is not available.
+
+4. **Small Order Surcharge**
+
+   If the cart value is less than the minimum order amount (`order_minimum_no_surcharge`): 
+   - A small order surcharge is added.
+   - The surcharge is calculated as:
+   ```plaintext
+   order_minimum_no_surcharge - cart_value
+   ```
+   - If the result is negative, the surcharge is set to 0.
+
+5. **Total Price**
+   The total order price is calculated as:
+   ```plaintext
+   cart_value + small_order_surcharge + delivery_fee
+   ```
+   - The small_order_surcharge is included only if applicable.
+   
+## 💻 Usage
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Available Scripts
+
+You can use the following scripts to manage the app:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
@@ -31,13 +86,9 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Note: This is a one-way operation and is irreversible.**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Use this command to eject the default configuration and take full control over Webpack, Babel, and ESLint configurations.
 
 ## Learn More
 

@@ -1,5 +1,5 @@
 // Package imports
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
@@ -15,6 +15,9 @@ import Button from '@mui/material/Button'
 // Types
 import { venueSlugs } from '../types/venue-slugs'
 import { Validation, ValidationPattern } from '../types/types'
+
+// Images
+import logo from '../assets/images/logo.png'
 
 const validationPattern: ValidationPattern = {
   cartValue: /^[0-9]+([.,][0-9]+)?$/,
@@ -93,13 +96,17 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
 
   // Render
   return (
-    <form onSubmit={submitForm} >
-      {/* H1 Title */}
-      <Typography variant="h1" gutterBottom >
-        Delivery Order Price Calculator
-      </Typography>
+    <form onSubmit={submitForm}>
+      <Box className="headerContainer">
+        {/* Logo */}
+        <img src={logo} alt={"Wolt logo"} className={"appLogo"}/>
+        {/* H1 Title */}
+        <Typography variant="h1" gutterBottom >
+          Delivery Order Price Calculator
+        </Typography>
+      </Box>
 
-      <Divider />
+      <Divider/>
 
       {/* H2 Title */}
       <Typography variant="h2" gutterBottom>
@@ -146,7 +153,6 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             variant="outlined"
             placeholder="Input cart value"
             aria-label="Cart value in euro"
-            aria-required="true"
             inputProps={{
               "data-test-id": "cartValue",
               maxLength: 32
@@ -155,8 +161,8 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
               clearPriceDetails()
 
-              let value = evt.target.value.replace(" ", "");
-              dispatch("data", { cartValue: value });
+              let value: string = evt.target.value.replace(" ", "");
+              dispatch("data", {cartValue: value});
             }}
             error={!!validation.cartValue}
             helperText={validation.cartValue}
@@ -175,7 +181,6 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             variant="outlined"
             placeholder="Input user latitude"
             aria-label="User latitude"
-            aria-required="true"
             inputProps={{
               "data-test-id": "userLatitude",
               maxLength: 64
@@ -184,10 +189,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
               clearPriceDetails()
 
-              const value = evt.target.value.replace(" ", "")
+              const value: string = evt.target.value.replace(" ", "")
               dispatch("data", {"userLatitude": value})
             }}
-            // required
             error={!!validation.userLatitude}
             helperText={validation.userLatitude}
             fullWidth
@@ -205,7 +209,6 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             variant="outlined"
             placeholder="Input user longitude"
             aria-label="User longitude"
-            aria-required="true"
             inputProps={{
               "data-test-id": "userLongitude",
               maxLength: 32
@@ -214,10 +217,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
             onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
               clearPriceDetails()
 
-              const value = evt.target.value.replace(" ", "")
-              dispatch("data",{"userLongitude": value})
+              const value: string = evt.target.value.replace(" ", "")
+              dispatch("data", {"userLongitude": value})
             }}
-            // required
             error={!!validation.userLongitude}
             helperText={validation.userLongitude}
             fullWidth
@@ -225,15 +227,15 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
         </Tooltip>
       </Box>
 
-      { orderDetails.error &&
+      {orderDetails.error &&
         <Box className="errorContainer">
-          <Typography variant="body1" className="error" >
+          <Typography variant="body1" className="error">
             {orderDetails.error}
           </Typography>
         </Box>
       }
 
-      <Box className="buttonsContainer" >
+      <Box className="buttonsContainer">
         {/* Get location Button */}
         <Button
           type="button"
@@ -261,4 +263,4 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
   )
 }
 
-export default DeliveryOrderCalculatorForm
+export default memo(DeliveryOrderCalculatorForm)
