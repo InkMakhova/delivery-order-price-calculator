@@ -1,5 +1,30 @@
 import { getDistance } from 'geolib'
-import { Location, DeliveryPriceParameters, DistanceRange, OrderDetails, PriceDetails } from '../types/types';
+import {
+  Location,
+  DeliveryPriceParameters,
+  DistanceRange,
+  OrderDetail,
+  PriceDetail,
+  OrderFormData
+} from '../types/types';
+
+export const formatOrderDetails = (orderDetails: OrderFormData): OrderDetail => {
+  let cartValue: string | number | null = orderDetails.cartValue
+
+  if (cartValue) {
+    cartValue = Math.round(Number(String(cartValue).replace(",","."))*100)
+  } else {
+    cartValue = 0
+  }
+
+  return {
+    cartValue: cartValue,
+    userLocation: {
+      latitude: Number(orderDetails.userLatitude),
+      longitude: Number(orderDetails.userLongitude)
+    }
+  }
+}
 
 const calculateDistance = (userLocation: Location, venueSlugLocation: Location): number => (
   getDistance(userLocation, venueSlugLocation)
@@ -25,8 +50,8 @@ const getDistanceRange = (distance: number, distanceRanges: DistanceRange[]): Di
 }
 
 export const calculateOrder = (
-  orderDetails: OrderDetails,
-  deliveryParameters: DeliveryPriceParameters): PriceDetails | null => {
+  orderDetails: OrderDetail,
+  deliveryParameters: DeliveryPriceParameters): PriceDetail | null => {
     const {
       cartValue,
       userLocation

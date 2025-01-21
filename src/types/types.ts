@@ -27,15 +27,27 @@ export type DeliveryPriceParameters = {
   distanceRanges: DistanceRange[]
 }
 
-export type OrderDetails = {
+export type OrderDetail = {
   cartValue: number,
   userLocation: Location
 }
 
-export type PriceDetails = {
+export type PriceDetail = {
   cartValue: number,
   smallOrderSurcharge: number,
   deliveryFee: number,
   deliveryDistance: number,
   totalPrice: number
+}
+
+export type ValidationPattern = {
+  cartValue: RegExp,
+  userLatitude: RegExp,
+  userLongitude: RegExp
+}
+
+export type Validation = {
+  cartValue: string | null,
+  userLatitude: string | null,
+  userLongitude: string | null
 }

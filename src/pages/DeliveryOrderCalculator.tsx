@@ -1,5 +1,5 @@
 // Package imports
-import React, {JSX, useEffect, useState} from 'react'
+import React, { JSX, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid2'
 import Card from '@mui/material/Card'
@@ -8,13 +8,13 @@ import Divider from '@mui/material/Divider'
 
 // Types
 import { venueSlugs } from '../types/venue-slugs'
-import { DeliveryPriceParameters, OrderDetails, OrderFormData, PriceDetails } from '../types/types'
+import { DeliveryPriceParameters, OrderDetail, OrderFormData, PriceDetail } from '../types/types'
 
 // Services
 import { fetchVenueSlugData } from '../services/api'
 
 // Utils
-import { calculateOrder } from '../util/util'
+import { calculateOrder, formatOrderDetails } from '../util/util'
 
 // Component imports
 import DeliveryOrderCalculatorForm from '../components/DeliveryOrderCalculatorForm'
@@ -48,7 +48,7 @@ function DeliveryOrderCalculator():JSX.Element {
     error: null
   }
 
-  const initialPriceDetails: {data: PriceDetails | null, error: string | null} = {
+  const initialPriceDetails: {data: PriceDetail | null, error: string | null} = {
     data: null,
     error: null
   }
@@ -61,13 +61,13 @@ function DeliveryOrderCalculator():JSX.Element {
     useState<{ data: OrderFormData, error: string | null }>(initialOrderDetails)
 
   const [deliveryPriceDetails, setDeliveryPriceDetails] =
-    useState<{ data: PriceDetails | null, error: string | null}>(initialPriceDetails)
+    useState<{ data: PriceDetail | null, error: string | null}>(initialPriceDetails)
 
-  const [pending, setPending] = useState(false)
+  const [pending, setPending] = useState<boolean>(false)
 
   // Handlers
   const dispatchForm = (key: "data" | "error", newDetailEntries: Partial<OrderFormData> | string): void => {
-    setOrderDetails((prevState) => {
+    setOrderDetails((prevState:typeof initialOrderDetails) => {
       if (key === "data" && typeof newDetailEntries !== "string") {
         return {
           ...prevState,
@@ -84,16 +84,14 @@ function DeliveryOrderCalculator():JSX.Element {
     })
   }
 
+  const clearPriceDetails = (): void => {
+    setDeliveryPriceDetails(initialPriceDetails)
+  }
+
   const submitForm = (): void => {
     // Calculate order
-    const transformedOrderDetails: OrderDetails = {
-      cartValue: Number(orderDetails.data.cartValue) * 100,
-      userLocation: {
-        latitude: Number(orderDetails.data.userLatitude),
-        longitude: Number(orderDetails.data.userLongitude)
-      }
-    };
-    const priceDetails: PriceDetails | null = calculateOrder(transformedOrderDetails, deliveryPriceParameters);
+    const formattedOrderDetails: OrderDetail = formatOrderDetails(orderDetails.data)
+    const priceDetails: PriceDetail | null = calculateOrder(formattedOrderDetails, deliveryPriceParameters)
 
     setDeliveryPriceDetails(() => {
       return {
@@ -122,10 +120,6 @@ function DeliveryOrderCalculator():JSX.Element {
 
       fetchVenueSlugData(orderDetails.data.venueSlug, setPending, successHandler, errorHandler)
     }
-
-    return () => {
-
-    }
   }, [orderDetails.data.venueSlug])
 
   return (
@@ -135,25 +129,27 @@ function DeliveryOrderCalculator():JSX.Element {
         <DeliveryOrderCalculatorForm
           orderDetails={orderDetails}
           dispatch={dispatchForm}
-          onSubmit={submitForm}
+          clearPriceDetails={clearPriceDetails}
+          submit={submitForm}
           pending={pending}
         />
 
-        <Box className="deliveryPriceContainer">
-          <Divider />
-
-          {/* Delivery calculation result */}
-          { deliveryPriceDetails.data &&
+        {/* Delivery calculation result */}
+        { deliveryPriceDetails.data &&
+          <Box className="deliveryPriceContainer">
             <DeliveryPriceDetails priceDetails={deliveryPriceDetails.data} />
-          }
+          </Box>
+        }
 
-          {/* Delivery calculation error */}
-          { deliveryPriceDetails.error &&
+        {/* Delivery calculation error */}
+        { deliveryPriceDetails.error &&
+          <Box className="deliveryPriceContainer">
+            <Divider />
             <Typography variant="body1" className="error">
               {deliveryPriceDetails.error}
             </Typography>
-          }
-        </Box>
+          </Box>
+        }
       </Card>
     </Grid>
   )

@@ -1,20 +1,20 @@
 // Package imports
 import React, { JSX, memo } from 'react'
 import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
 
 // Types
-import { PriceDetails } from '../types/types'
+import { PriceDetail } from '../types/types'
 
 // Component imports
 import PriceDetailItem from './PriceDetailItem'
 
-const DeliveryPriceDetails = ({ priceDetails }: { priceDetails: PriceDetails }): JSX.Element => {
+const DeliveryPriceDetails = ({ priceDetails }: { priceDetails: PriceDetail }): JSX.Element => {
   return (
    <>
-      {/* H2 Title */}
-      <Typography variant="h2" gutterBottom>
-        Price breakdown
-      </Typography>
+      <Divider />
+
+      <Typography variant="h2" gutterBottom>Price breakdown</Typography>
 
       <PriceDetailItem title={"Cart value"} value={priceDetails.cartValue} unit={"EUR"} />
 
