@@ -41,6 +41,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
 
   // Handlers
   const getLocation = (): void => {
+    // Reset error
+    dispatch("error", null);
+
     if ("geolocation" in navigator) {
       // Clear old price details
       clearPriceDetails()
@@ -54,12 +57,17 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
           const longitude = position.coords.longitude;
 
           dispatch("data", { userLatitude: latitude, userLongitude: longitude });
+
+          // Clear watcher after getting location
+          if (window.currentWatcherId !== undefined) {
+            navigator.geolocation.clearWatch(window.currentWatcherId)
+          }
         },
         (): void => {
           dispatch("error", "Error getting user location");
         },
         // optimization options (Chrome gets location slowly)
-        { enableHighAccuracy: false, timeout:60000, maximumAge: 0 }
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 }
       );
     } else {
       dispatch("error", "Geolocation is not supported by this browser.")
@@ -85,6 +93,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
 
   const submitForm = (evt: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }): void => {
     evt.preventDefault()
+
+    // Reset error
+    dispatch("error", null);
 
     // Clear price details of previous data
     clearPriceDetails()
