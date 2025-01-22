@@ -57,7 +57,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
         },
         (): void => {
           dispatch("error", "Error getting user location");
-        }
+        },
+        // optimization options (Chrome gets location slowly)
+        { enableHighAccuracy: false, timeout:60000, maximumAge: 0 }
       );
     } else {
       dispatch("error", "Geolocation is not supported by this browser.")
