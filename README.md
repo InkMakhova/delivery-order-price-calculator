@@ -52,9 +52,7 @@ The **Delivery Order Price Calculator** is an application designed to calculate 
 
 ### Install dependencies
 
-```
-npm install
-```
+### `npm install`
 
 ### Available Scripts
 
