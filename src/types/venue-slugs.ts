@@ -1,4 +1,15 @@
-export const venueSlugs: string[] = [
-  "home-assignment-venue-helsinki",
-  "home-assignment-venue-tallinn"
+type VenueSlug = {
+  value: string,
+  text: string
+}
+
+export const venueSlugs: VenueSlug[] = [
+  {
+    value: "home-assignment-venue-helsinki",
+    text: "Helsinki"
+  },
+  {
+    value: "home-assignment-venue-tallinn",
+    text: "Tallinn"
+  }
 ]

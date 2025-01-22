@@ -1,7 +1,7 @@
 import { venueSlugs } from './venue-slugs'
 
 export type OrderFormData = {
-  venueSlug: typeof venueSlugs[number],
+  venueSlug: typeof venueSlugs[number]["value"],
   cartValue: string | number | null,
   userLatitude: string | number | null,
   userLongitude: string | number | null

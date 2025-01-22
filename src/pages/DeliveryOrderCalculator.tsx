@@ -40,7 +40,7 @@ function DeliveryOrderCalculator():JSX.Element {
 
   const initialOrderDetails: {data: OrderFormData, error: string | null} = {
     data: {
-      venueSlug: venueSlugs[0],
+      venueSlug: venueSlugs[0]["value"],
       cartValue: "",
       userLatitude: "",
       userLongitude: ""
@@ -54,7 +54,7 @@ function DeliveryOrderCalculator():JSX.Element {
   }
 
   // Ref to track the current venue slug to fetch data only when it changes
-  const venueSlugRef = useRef<typeof venueSlugs[number] | null>(null)
+  const venueSlugRef = useRef<typeof venueSlugs[number]["value"] | null>(null)
 
   // States
   const [deliveryPriceParameters, setDeliveryPriceParameters] =

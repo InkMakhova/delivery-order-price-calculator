@@ -137,7 +137,9 @@ const DeliveryOrderCalculatorForm = (props: {orderDetails: any, dispatch: any, c
                 })
               }}
             >
-              {venueSlugs.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+              { venueSlugs.map(venueSlug =>
+                <MenuItem key={venueSlug.value} value={venueSlug.value}>{venueSlug.text}</MenuItem>)
+              }
             </Select>
           </FormControl>
         </Tooltip>
